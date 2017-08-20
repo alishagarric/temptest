@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Geocode  Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+
+<body>
+
+<span>Your Latitude : </span><span id="lat"></span><br>
+<span>Your Longitude : </span><span id="lng"></span><br>
+<span>Your Location:  </span><span id="result"></span><br>
+<span>The Temp: </span><span id="temp"></span><br>
+
+<script>
+$(document).ready(function() {
+    var lat, lon, api_url;
+
+    $.ajax({
+		  type : 'POST',
+		  data: '',
+		  url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCW0lvagDP67ulkwwP7yAIBHJoj2HT0apM",
+
+      success: function(result){
+        lat = result['location']['lat'];
+        $('#lat').html(lat);
+        lon = result['location']['lng'];
+				$('#lng').html(lon);
+
+        api_url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
+        lat + '&lon=' +
+        lon + '&units=metric&appid=b231606340553d9174136f7f083904b3';
+
+        $.ajax({
+          url : api_url,
+          method : 'GET',
+          success : function (data) {
+            var tempr = data.main.temp;
+            var location = data.name;
+            var desc = data.weather.description;
+            $('#result').text(location);
+            $('#temp').text(tempr + '°');
+          }
+        });
+       }
+    });
+});
+</script>
+
+
+</body>
+</html>
